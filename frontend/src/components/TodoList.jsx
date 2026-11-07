@@ -1,6 +1,6 @@
 import TodoItem from "./TodoItem";
 
-function TodoList({ todos, onDelete, onEdit }) {
+function TodoList({ todos, onDelete, onEdit, onToggle }) {
   if (todos.length === 0) {
     return (
       <p className="py-8 text-center text-gray-500">
@@ -17,6 +17,7 @@ function TodoList({ todos, onDelete, onEdit }) {
           todo={todo}
           onDelete={onDelete}
           onEdit={onEdit}
+          onToggle={onToggle}
         />
       ))}
     </div>
