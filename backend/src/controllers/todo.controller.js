@@ -18,3 +18,12 @@ export const createTodo = asyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse(201, todo, "Todo created Successfully"));
 });
+
+// get All Todo
+export const getAllTodo = asyncHandler(async (req, res) => {
+  const todos = await Todo.find().sort({ createdAt: -1 });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, todos, "Todos fetched successfully"));
+});
