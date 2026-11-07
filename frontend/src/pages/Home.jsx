@@ -34,6 +34,17 @@ function Home() {
     setTodos((prev) => [savedTodo, ...prev]);
   };
 
+  // Delete todo
+  const handleDelete = async (id) => {
+    try {
+      await api.delete(`/todos/${id}`);
+
+      setTodos((prev) => prev.filter((todo) => todo._id !== id));
+    } catch (error) {
+      setError(error.response?.data?.message || "Failed to delete todo");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-10">
       <div className="mx-auto max-w-2xl">
@@ -50,7 +61,7 @@ function Home() {
         {loading ? (
           <p className="text-center text-gray-500">Loading todos...</p>
         ) : (
-          <TodoList todos={todos} />
+          <TodoList todos={todos} onDelete={handleDelete} />
         )}
       </div>
     </div>
