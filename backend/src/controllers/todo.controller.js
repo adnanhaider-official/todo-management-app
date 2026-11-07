@@ -2,6 +2,7 @@ import Todo from "../models/todo.model.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiResponse from "../utils/apiResponse.js";
 import ApiError from "../utils/apiError.js";
+import mongoose from "mongoose";
 
 // create Todo
 export const createTodo = asyncHandler(async (req, res) => {
@@ -26,4 +27,32 @@ export const getAllTodo = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, todos, "Todos fetched successfully"));
+});
+
+// update Todo
+export const updateTodo = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new ApiError(400, "Invalid Todo ID");
+  }
+
+  const todo = await Todo.findByIdAndUpdate(
+    id,
+    {
+      $set: req.body,
+    },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+
+  if (!todo) {
+    throw new ApiError(404, "Todo not found");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, todo, "Todo updated successfully"));
 });
