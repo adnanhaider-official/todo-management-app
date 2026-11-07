@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../lib/axios";
 
-function TodoForm() {
+function TodoForm({ onTodoSaved }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,7 +25,7 @@ function TodoForm() {
         description,
       });
 
-      console.log(response.data.data);
+      onTodoSaved(response.data.data);
 
       setTitle("");
       setDescription("");

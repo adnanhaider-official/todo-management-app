@@ -29,6 +29,11 @@ function Home() {
     fetchTodos();
   }, []);
 
+  // Add new todo to list
+  const handleTodoSaved = (savedTodo) => {
+    setTodos((prev) => [savedTodo, ...prev]);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-10">
       <div className="mx-auto max-w-2xl">
@@ -36,7 +41,7 @@ function Home() {
           My Todo App
         </h1>
 
-        <TodoForm />
+        <TodoForm onTodoSaved={handleTodoSaved} />
 
         <h2 className="mb-4 mt-8 text-xl font-semibold">My Todos</h2>
 
