@@ -56,3 +56,22 @@ export const updateTodo = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, todo, "Todo updated successfully"));
 });
+
+// delete Todo
+export const deleteTodo = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new ApiError(400, "Invalid Todo ID");
+  }
+
+  const todo = await Todo.findByIdAndDelete(id);
+
+  if (!todo) {
+    throw new ApiError(404, "Todo not found");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, todo, "Todo deleted successfully"));
+});
