@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
+import todoRoutes from "./routes/todo.routes.js";
+import errorHandler from "./middlewares/errorHandler.js";
 
 dotenv.config();
 
@@ -13,9 +15,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.get("/", (req, res) => {
-  res.send("Hello Todo API");
-});
+app.use("/api/todos", todoRoutes);
+
+// Global Error Handler
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 
