@@ -7,6 +7,7 @@ function Home() {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [editingTodo, setEditingTodo] = useState(null);
 
   // Fetch All Todos
   const fetchTodos = async () => {
@@ -31,7 +32,15 @@ function Home() {
 
   // Add new todo to list
   const handleTodoSaved = (savedTodo) => {
-    setTodos((prev) => [savedTodo, ...prev]);
+    if (editingTodo) {
+      setTodos((prev) =>
+        prev.map((todo) => (todo._id === savedTodo._id ? savedTodo : todo)),
+      );
+
+      setEditingTodo(null);
+    } else {
+      setTodos((prev) => [savedTodo, ...prev]);
+    }
   };
 
   // Delete todo
@@ -45,6 +54,11 @@ function Home() {
     }
   };
 
+  // Edit todo (temporary)
+  const handleEdit = (todo) => {
+    setEditingTodo(todo);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-10">
       <div className="mx-auto max-w-2xl">
@@ -52,7 +66,11 @@ function Home() {
           My Todo App
         </h1>
 
-        <TodoForm onTodoSaved={handleTodoSaved} />
+        <TodoForm
+          onTodoSaved={handleTodoSaved}
+          editingTodo={editingTodo}
+          onCancel={() => setEditingTodo(null)}
+        />
 
         <h2 className="mb-4 mt-8 text-xl font-semibold">My Todos</h2>
 
@@ -61,7 +79,7 @@ function Home() {
         {loading ? (
           <p className="text-center text-gray-500">Loading todos...</p>
         ) : (
-          <TodoList todos={todos} onDelete={handleDelete} />
+          <TodoList todos={todos} onDelete={handleDelete} onEdit={handleEdit} />
         )}
       </div>
     </div>
